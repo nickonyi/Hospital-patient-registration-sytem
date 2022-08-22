@@ -1,57 +1,34 @@
-import java.util.Scanner;
-import myClass.Patient;
-import java.sql.*;
-import java.sql.DriverManager;
+import java.util.*;
 
-public class Nurse extends User {
-    
-//methods
-void register(String regNumber){
-Patient patient1 = new Patient();
-    if(patient1.checkExist(regNumber)){
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to the database.........");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hospital-patient-registration-management-system","root","");
-            Statement stmt = conn.createStatement();
-            String sql= "SELECT * FROM Visitors_DB WHERE serialization = '"+regNumber+"'";
-            ResultSet res = stmt.executeQuery(sql);
-            System.out.println("Patient present in the system");
-            System.out.println("Displaying data.....");
-            res.next();
-            System.out.println(res.getString(1)+" "+res.getString(2)+" "+res.getString(3)+" "+res.getString(4));
-        } catch(Exception e){System.out.println(e);} 
-    } else {
-System.out.println("Enter Name");
-Scanner input = new Scanner(System.in);
-String enteredName = input.nextLine();
-System.out.println("Enter county of residence");
-String county = input.nextLine();
-System.out.println("Enter date");
-String date = input.nextLine();
-System.out.println("Enter Serial number");
-String enteredNumber = input.nextLine();
-System.out.println("Enter id");
-int enteredId = input.nextInt(); 
+public class Nurse {
+    //properties 
+    String name;
+    String county_of_residence;
+    String id;
 
+    //methods
+    void register (){
+        Scanner input = new Scanner(System.in);
+        Patient list_of_patients[] = new Patient[3];
 
-try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-    System.out.println("Connecting to the database......");
-    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hospital-patient-registration-management-system","root","");
-    System.out.println("Connected to the database");
-    Statement stmt = conn.createStatement();
-    String sql = "INSERT INTO Visitors_DB()"+"VALUES('"+enteredId+"','"+enteredName+"','"+county+"','"+enteredNumber+"')";
-    stmt.executeUpdate(sql);
-    sql = "INSERT INTO Patients()"+"VALUES('"+enteredName+"','"+county+"','"+enteredNumber+"','"+date+"')";
-    stmt.executeUpdate(sql);
-    System.out.println("Data inserted successfully");
-    sql = " SELECT * FROM Visitors_DB";
-    ResultSet res = stmt.executeQuery(sql);
-    res.next();
-    System.out.println(enteredId+" "+ enteredName+" "+ county+" "+ enteredNumber);
-} catch(Exception e){System.out.println(e);} 
+        int count = 0;
+        while(count < 3){
+            System.out.println("Enter your name");
+            name = input.nextLine();
+            System.out.println("Enter county of residence");
+            county_of_residence = input.nextLine();
+            System.out.println("Enter id");
+            id = input.nextLine();
+            Patient aPatient = new Patient(name,county_of_residence,id);
+            list_of_patients[count] = aPatient;
+            count++;
+        }
+
+        for(count=0; count<list_of_patients.length; count++){
+            System.out.println("Name: " +list_of_patients[count].name);
+            System.out.println("County_of_residence: " + list_of_patients[count].county_of_residence);
+            System.out.println("id: "+list_of_patients[count].id);
+        }
+
+    }
 }
-}
-}
-
